@@ -1,0 +1,59 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+# kod sahibi Berk EKİN iletişim: berk.ekin.9@gmail.com
+# kod 2023 ağustos ayında güncellenmiştir hata alma ihtimaliniz vardır kod geliştirme aşamasındadır beta versiyonudur.
+def instagram_report():
+    # Chromium tarayıcısını başlat
+    web_browser = webdriver.Chrome()
+
+    try:
+        # Instagram rapor formu sayfasına git
+        web_browser.get("https://help.instagram.com/contact/383679321740945")
+
+        # Formu otomatik doldur
+        WebDriverWait(web_browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//input[@name='email']"))
+        ).send_keys("email@example.com")
+
+        WebDriverWait(web_browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//input[@name='username']"))
+        ).send_keys("kullanici_adi")
+
+        WebDriverWait(web_browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//input[@name='platform']"))
+        ).send_keys("Platform Adı")
+
+        WebDriverWait(web_browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//input[@name='harmed_username']"))
+        ).send_keys("zarar_goren_kullanici_adi")
+
+        WebDriverWait(web_browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//input[@name='harmed_date']"))
+        ).send_keys("01/01/2023")
+
+        description_field = WebDriverWait(web_browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//textarea[@name='description']"))
+        )
+        description_field.send_keys("Rapor açıklaması...")
+        description_field.send_keys(Keys.RETURN)
+
+        # Başarılı işlem mesajını kontrol et
+        success_message = WebDriverWait(web_browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Başarılı işlem')]"))
+        )
+        if success_message.is_displayed():
+            print("İşlem başarılı!")
+
+    except Exception as e:
+        print(f"Bir hata meydana geldi: {e}")
+
+    finally:
+        # Tarayıcıyı kapat
+        web_browser.quit()
+
+# Fonksiyonu çağır
+instagram_report()
